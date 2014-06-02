@@ -1,4 +1,3 @@
-from functools import partial
 from apply_rules import *
 
 LegendreP = create_op('Pn', None)
