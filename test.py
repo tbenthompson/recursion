@@ -111,12 +111,14 @@ def test_apply_rules():
     expr = Sub(Sub('0', 'x'), '1')
     rules = [Rule(Sub(any(0), any(1)), Add(any(0), Neg(any(1))))]
     result = apply_rules(expr, rules)
-    print result
-    assert(result == Add(Add('0', Neg('x')), Neg('1')))
+    assert(result == Add(Add('0', Neg('x')), '-1'))
 
 
 def test_apply_infinite_stop():
     expr = Sub(Sub('0', 'x'), '1')
     rules = [Rule(Sub(any(0), any(1)), Add(any(0), Neg(any(1)))),
              Rule(Add(any(0), any(1)), Add(any(1), any(0)))]
-    assert(apply_rules(expr, rules) == Add(Neg('1'), Add(Neg('x'), '0')))
+    rearranged = apply_rules(expr, rules)
+    rules = [Rule('x', '2')]
+    result = apply_rules(rearranged, rules)
+    assert(result == '-3')

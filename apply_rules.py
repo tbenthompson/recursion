@@ -40,17 +40,19 @@ def traverse_args(expr, rules):
     return expr
 
 def update_history(history, new_expr):
-    if new_expr in history:
+    if new_expr not in history:
+        history.append(new_expr)
+    return new_expr
 
 def apply_rules(expr, rules):
     done = False
-    prior_exprs = [expr]
-    import ipdb;ipdb.set_trace()
+    history = [expr]
     while not done:
-        update_history(history, act(prior_exprs[-1]))
-        update_history(history, match_and_transform(prior_exprs[-1], rules))
-        update_history(history, traverse_args(prior_exprs[-1], rules))
-        if prior_exprs[-1] in prior_exprs[:-3]:
+        history_size = len(history)
+        expr = update_history(history, match_and_transform(expr, rules))
+        expr = update_history(history, traverse_args(expr, rules))
+        expr = update_history(history, act(expr))
+        if len(history) == history_size:
             done = True
     return expr
 
