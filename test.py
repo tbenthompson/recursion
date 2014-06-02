@@ -69,4 +69,7 @@ def test_match_transform_identity():
     assert(match(result, expr) == (True, {}))
 
 # APPLY RULES
-
+def test_match_and_transform():
+    expr = Minus(['x', '0'])
+    rule = Rule(Minus([any(0), '0']), any(0))
+    match_and_transform(expr, [rule])

@@ -19,13 +19,13 @@ rules.append(Rule(Minus([any(0), zero]), any(0)))
 
 class TransformException(Exception): pass
 
-# def traverse_args(expr, rules):
-#     if type(expr) is str:
-#         return expr
-#     for idx, a in enumerate(expr.args):
-#         orig_expr = expr.args[idx]
-#         expr.args[idx] = apply_rules(orig_expr, rules)
-#     return expr
+def traverse_args(expr, rules):
+    if type(expr) is str:
+        return expr
+    for idx, a in enumerate(expr.args):
+        orig_expr = expr.args[idx]
+        expr.args[idx] = apply_rules(orig_expr, rules)
+    return expr
 
 
 def apply_rules(expr, rules):
@@ -33,7 +33,7 @@ def apply_rules(expr, rules):
     while not done:
         orig_expr = expr
         expr = match_and_transform(orig_expr, rules)
-        # expr = traverse_args(expr, rules)
+        expr = traverse_args(expr, rules)
         if expr is orig_expr:
             done = True
 
@@ -74,6 +74,7 @@ def transform_var(template, any_list):
     if split_template_name[1] not in any_list:
         raise TransformException("Transforming improperly matched expression")
     return any_list[split_template_name[1]]
+
 
 def transform(template, any_list):
     if type(template) is str:
